@@ -108,6 +108,8 @@ static int perf_test;
 #include "tests/isr2entry.h"
 #include "tests/isrentry.h"
 #include "tests/isrexit.h"
+#include "tests/istentry.h"
+#include "tests/istexit.h"
 #include "tests/terml.h"
 
 #define PERF_ENABLE(name)  { 0, 0 },

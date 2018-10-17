@@ -75,6 +75,10 @@ TASK(MainTask)
 
 int main( void )
 {
+	// Temporary fix for ISR1 in x86
+	set_interrupt_handler(0x24, isrentry_isr1);
+	set_interrupt_handler(0x25, isrexit_isr1);
+
   	StartOS(OSDEFAULTAPPMODE);
   	return 0;
 }
