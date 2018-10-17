@@ -105,6 +105,9 @@ static int perf_test;
 #include "tests/actl.h"
 #include "tests/intdisable.h"
 #include "tests/intenable.h"
+#include "tests/isr2entry.h"
+#include "tests/isrentry.h"
+#include "tests/isrexit.h"
 
 #define PERF_ENABLE(name)  { 0, 0 },
 static struct perfdata alldata[] = {
