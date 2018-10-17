@@ -54,12 +54,12 @@
 #include "../hal.h"
 #include "../perftest.h"
 
-static void isrexit_setup(struct perfdata *data)
+static void isrexit_setup(struct perftest *data)
 {
 	DemoHAL_ISRDisable();
 }
 
-static void isrexit_main(struct perfdata *data)
+static void isrexit_main(struct perftest *data)
 {
   	volatile OSEE_TICK_TYPE delta;
   	int i;
@@ -71,19 +71,19 @@ static void isrexit_main(struct perfdata *data)
   	}
 }
 
-static void isrexit_task1(struct perfdata *data)
+static void isrexit_task1(struct perftest *data)
 {
 }
 
-static void isrexit_task3(struct perfdata *data)
+static void isrexit_task3(struct perftest *data)
 {
 }
 
-static void isrexit_task4(struct perfdata *data)
+static void isrexit_task4(struct perftest *data)
 {
 }
 
-static void isrexit_cleanup(struct perfdata *data)
+static void isrexit_cleanup(struct perftest *data)
 {
 	perf_finalize(data);
 }

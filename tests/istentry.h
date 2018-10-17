@@ -54,12 +54,12 @@
 #include "../hal.h"
 #include "../perftest.h"
 
-static void istentry_setup(struct perfdata *data)
+static void istentry_setup(struct perftest *data)
 {
 	DemoHAL_ISRDisable();
 }
 
-static void istentry_main(struct perfdata *data)
+static void istentry_main(struct perftest *data)
 {
   	int i;
 
@@ -69,11 +69,11 @@ static void istentry_main(struct perfdata *data)
   	}
 }
 
-static void istentry_task1(struct perfdata *data)
+static void istentry_task1(struct perftest *data)
 {
 }
 
-static void istentry_task3(struct perfdata *data)
+static void istentry_task3(struct perftest *data)
 {
   	static int i;
   	OSEE_TICK_TYPE delta;
@@ -82,11 +82,11 @@ static void istentry_task3(struct perfdata *data)
   	perf_store_sample(data, delta, ++i);
 }
 
-static void istentry_task4(struct perfdata *data)
+static void istentry_task4(struct perftest *data)
 {
 }
 
-static void istentry_cleanup(struct perfdata *data)
+static void istentry_cleanup(struct perftest *data)
 {
 	perf_finalize(data);
 }

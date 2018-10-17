@@ -54,12 +54,12 @@
 #include "../hal.h"
 #include "../perftest.h"
 
-static void isrentry_setup(struct perfdata *data)
+static void isrentry_setup(struct perftest *data)
 {
 	DemoHAL_ISRDisable();
 }
 
-static void isrentry_main(struct perfdata *data)
+static void isrentry_main(struct perftest *data)
 {
   	int i;
 
@@ -69,19 +69,19 @@ static void isrentry_main(struct perfdata *data)
   	}
 }
 
-static void isrentry_task1(struct perfdata *data)
+static void isrentry_task1(struct perftest *data)
 {
 }
 
-static void isrentry_task3(struct perfdata *data)
+static void isrentry_task3(struct perftest *data)
 {
 }
 
-static void isrentry_task4(struct perfdata *data)
+static void isrentry_task4(struct perftest *data)
 {
 }
 
-static void isrentry_cleanup(struct perfdata *data)
+static void isrentry_cleanup(struct perftest *data)
 {
 	perf_finalize(data);
 }

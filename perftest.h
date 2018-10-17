@@ -48,23 +48,40 @@
 #ifndef __PERFTEST_H__
 #define __PERFTEST_H__
 
+#include <inmate.h>
 #include "osperf.h"
 
 #define PERF_LOOPS  5
 
 /*
- * Each test has right to store its own results into a perfdata structure.
+ * Each test has right to store its own results into a perftest structure.
  * All values expressed in ns.
+ * Test descriptor:
+ * - setup() is called when the execution of the single test begins;
+ * - run() is called to execute the test, and is supposed to generate
+ *   all the necessary events and to collect stats on them;
+ * - cleanup() restores the initial condition.
  */
-struct perfdata {
+struct perftest {
+  	const char *test_name;
+  	void (*setup)(struct perftest *data);
+  	void (*main)(struct perftest *data);
+  	void (*task1)(struct perftest *data);
+  	void (*task3)(struct perftest *data);
+  	void (*task4)(struct perftest *data);
+  	void (*cleanup)(struct perftest *data);
   	OSEE_TICK_TYPE mean;
   	OSEE_TICK_TYPE max;
   	OSEE_TICK_TYPE min;
-  	const char *test_name;
 };
 
+static struct perftest alltests[];
+static int perf_test;
+
+#define curdata (&alltests[perf_test])
+
 /* Common code to update the values of the measures. */
-static void perf_store_sample(struct perfdata *data,
+static void perf_store_sample(struct perftest *data,
   		OSEE_TICK_TYPE sample, uint32_t n)
 {
   	data->mean = (((n - 1U) * data->mean) + sample) / n;
@@ -78,28 +95,6 @@ static void perf_store_sample(struct perfdata *data,
   	}
 }
 
-/*
- * Test descriptor:
- * - setup() is called when the execution of the single test begins;
- * - run() is called to execute the test, and is supposed to generate
- *   all the necessary events and to collect stats on them;
- * - cleanup() restores the initial condition.
- */
-struct perftest {
-  	void (*setup)(struct perfdata *data);
-  	void (*main)(struct perfdata *data);
-  	void (*task1)(struct perfdata *data);
-  	void (*task3)(struct perfdata *data);
-  	void (*task4)(struct perfdata *data);
-  	void (*cleanup)(struct perfdata *data);
-};
-
-static struct perftest alltests[];
-static struct perfdata alldata[];
-static int perf_test;
-
-#define curdata (&alldata[perf_test])
-
 /* Supported tests. */
 #include "tests/act.h"
 #include "tests/actl.h"
@@ -112,16 +107,10 @@ static int perf_test;
 #include "tests/istexit.h"
 #include "tests/terml.h"
 
-#define PERF_ENABLE(name)  { 0, 0 },
-static struct perfdata alldata[] = {
-#include "perflist.h"
-};
-#undef PERF_ENABLE
-
-#define PERF_ENABLE(name)  { 0, 0, 0, 0, 0, 0 },
+#define PERF_ENABLE(name)  { 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0},
 static struct perftest alltests[] = {
 #include "perflist.h"
-	{ 0, 0, 0, 0, 0, 0 }
+	{ 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0}
 };
 #undef PERF_ENABLE
 
@@ -132,10 +121,10 @@ static struct perftest alltests[] = {
   	alltests[i].task3 = name ## _task3;     \
   	alltests[i].task4 = name ## _task4;     \
   	alltests[i].cleanup = name ## _cleanup; \
-  	alldata[i].mean = 0U;                   \
-  	alldata[i].max  = 0U;                   \
-  	alldata[i].min  = 0U;                   \
-  	alldata[i].test_name  = #name;          \
+  	alltests[i].mean = 0U;                   \
+  	alltests[i].max  = 0U;                   \
+  	alltests[i].min  = 0U;                   \
+  	alltests[i].test_name  = #name;          \
   	i++; }
 
 volatile unsigned alltest_size;
@@ -155,24 +144,23 @@ static void perf_init(void)
 static void perf_run_all(void)
 {
   	struct perftest *test;
-  	struct perfdata *data;
 
   	perf_test = 0;
   	test = &alltests[0];
 
   	do {
-    		data = &alldata[perf_test];
+		printk("Running new test...\n");
 
-    		test->setup(data);
-    		test->main(data);
-    		test->cleanup(data);
+    		test->setup(test);
+    		test->main(test);
+    		test->cleanup(test);
 
     		test = &alltests[++perf_test];
   	} while (test->main);
 }
 
-void perf_finalize(struct perfdata *data);
-void perf_finalize(struct perfdata *data)
+void perf_finalize(struct perftest *data);
+void perf_finalize(struct perftest *data)
 {
 	/*
  	 * Put here any code that must be executed by all tests
@@ -197,8 +185,7 @@ static void perf_final_results ( void )
  */
 #define perf_run_task(id) do {                  \
   	struct perftest *test = &alltests[perf_test]; \
-  	struct perfdata *data = &alldata[perf_test];  \
-  	test->task ## id (data);                      \
+  	test->task ## id (test);                      \
 } while (0)
 
 #endif /* __PERFTEST_H__ */

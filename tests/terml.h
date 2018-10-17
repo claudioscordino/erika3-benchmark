@@ -54,11 +54,11 @@
 #include "../hal.h"
 #include "../perftest.h"
 
-static void terml_setup(struct perfdata *data)
+static void terml_setup(struct perftest *data)
 {
 }
 
-static void terml_main(struct perfdata *data)
+static void terml_main(struct perftest *data)
 {
 	int i;
 
@@ -66,11 +66,11 @@ static void terml_main(struct perfdata *data)
 		ActivateTask(Task4);
 }
 
-static void terml_task1(struct perfdata *data)
+static void terml_task1(struct perftest *data)
 {
 }
 
-static void terml_task3(struct perfdata *data)
+static void terml_task3(struct perftest *data)
 {
 	OSEE_TICK_TYPE delta;
 	static int i;
@@ -79,13 +79,13 @@ static void terml_task3(struct perfdata *data)
 	perf_store_sample(data, delta, ++i);
 }
 
-static void terml_task4(struct perfdata *data)
+static void terml_task4(struct perftest *data)
 {
 	ActivateTask(Task3);
 	perf_start_measure();
 }
 
-static void terml_cleanup(struct perfdata *data)
+static void terml_cleanup(struct perftest *data)
 {
 	perf_finalize(data);
 }

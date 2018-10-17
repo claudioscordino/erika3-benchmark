@@ -51,11 +51,11 @@
 #include "../hal.h"
 #include "../perftest.h"
 
-static void intdisable_setup(struct perfdata *data)
+static void intdisable_setup(struct perftest *data)
 {
 }
 
-static void intdisable_main(struct perfdata *data)
+static void intdisable_main(struct perftest *data)
 {
 	OSEE_TICK_TYPE delta;
 	int i;
@@ -72,19 +72,19 @@ static void intdisable_main(struct perfdata *data)
 	}
 }
 
-static void intdisable_task1(struct perfdata *data)
+static void intdisable_task1(struct perftest *data)
 {
 }
 
-static void intdisable_task3(struct perfdata *data)
+static void intdisable_task3(struct perftest *data)
 {
 }
 
-static void intdisable_task4(struct perfdata *data)
+static void intdisable_task4(struct perftest *data)
 {
 }
 
-static void intdisable_cleanup(struct perfdata *data)
+static void intdisable_cleanup(struct perftest *data)
 {
 	EnableAllInterrupts();
 	perf_finalize(data);

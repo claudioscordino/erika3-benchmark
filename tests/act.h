@@ -54,11 +54,11 @@
 #include "../hal.h"
 #include "../perftest.h"
 
-static void act_setup(struct perfdata *data)
+static void act_setup(struct perftest *data)
 {
 }
 
-static void act_main(struct perfdata *data)
+static void act_main(struct perftest *data)
 {
 	int i;
 
@@ -68,11 +68,11 @@ static void act_main(struct perfdata *data)
 	}
 }
 
-static void act_task1(struct perfdata *data)
+static void act_task1(struct perftest *data)
 {
 }
 
-static void act_task3(struct perfdata *data)
+static void act_task3(struct perftest *data)
 {
 	OSEE_TICK_TYPE delta;
 	static int i;
@@ -81,11 +81,11 @@ static void act_task3(struct perfdata *data)
 	perf_store_sample(data, delta, ++i);
 }
 
-static void act_task4(struct perfdata *data)
+static void act_task4(struct perftest *data)
 {
 }
 
-static void act_cleanup(struct perfdata *data)
+static void act_cleanup(struct perftest *data)
 {
 	perf_finalize(data);
 }
