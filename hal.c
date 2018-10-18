@@ -62,8 +62,8 @@ FUNC(void, APPL_CODE) DemoHAL_IdleHook (void )
 
 FUNC(void, APPL_CODE) DemoHAL_DataBarrier ( void ) {}
 
-#define ISR2ENTRY_ISR2	0x21
-#define ISR2ENTRY_ISR1	0x22
+#define ISRENTRY_ISR2	0x21
+#define ISRENTRY_ISR1	0x22
 #define ISREXIT_ISR1	0x23
 #define ISTENTRY_ISR2	0x24
 #define ISTEXIT_ISR2	0x25
@@ -77,11 +77,11 @@ FUNC(void, APPL_CODE) DemoHAL_ISRTrigger(
 ) {
 	switch (isr) {
 	case DEMO_HAL_ISR_0:
-		call_int(ISR2ENTRY_ISR2);
+		call_int(ISRENTRY_ISR2);
 		break;
 
 	case DEMO_HAL_ISR_1:
-		call_int(ISR2ENTRY_ISR1);
+		call_int(ISRENTRY_ISR1);
 		break;
 
 	case DEMO_HAL_ISR_2:

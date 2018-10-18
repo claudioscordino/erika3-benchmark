@@ -142,33 +142,34 @@ CPU mySystem {
       };
     };
 
-    ISR isr2entry_isr2 {
+    ISR isrentry_isr2 {
       CATEGORY = 2;
       PRIORITY = 1;
       SOURCE = "0x21";
     };
 
-    ISR istentry_isr2 {
-      CATEGORY = 2;
-      PRIORITY = 2;
-      SOURCE = "0x22";
-    };
-
-    ISR istexit_isr2 {
-      CATEGORY = 2;
-      PRIORITY = 3;
-      SOURCE = "0x23";
-    };
 
     ISR isrentry_isr1 {
       CATEGORY = 1;
       PRIORITY = 4;
-      SOURCE = "0x24";
+      SOURCE = "0x22";
     };
 
     ISR isrexit_isr1 {
       CATEGORY = 1;
       PRIORITY = 5;
+      SOURCE = "0x23";
+    };
+
+    ISR istentry_isr2 {
+      CATEGORY = 2;
+      PRIORITY = 2;
+      SOURCE = "0x24";
+    };
+
+    ISR istexit_isr2 {
+      CATEGORY = 2;
+      PRIORITY = 3;
       SOURCE = "0x25";
     };
 };
