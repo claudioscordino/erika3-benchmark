@@ -53,14 +53,6 @@
 
 static volatile OSEE_TICK_TYPE measure;
 
-DeclareIsr(isrentry_isr2);
-DeclareIsr(istentry_isr2);
-DeclareIsr(istexit_isr2);
-
-DeclareIsr(isrentry_isr1);
-DeclareIsr(isrexit_isr1);
-
-
 void perf_hw_init ( void );
 void perf_hw_init ( void )
 {
