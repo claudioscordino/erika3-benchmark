@@ -52,7 +52,7 @@
 #define __ACTL_H__
 
 #include "../hal.h"
-#include "../perftest.h"
+#include "../test.h"
 
 static void actl_setup(struct perftest *data)
 {

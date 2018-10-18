@@ -52,7 +52,7 @@
 #define __ACT_H__
 
 #include "../hal.h"
-#include "../perftest.h"
+#include "../test.h"
 
 static void act_setup(struct perftest *data)
 {

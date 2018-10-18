@@ -50,11 +50,134 @@
  * Generic OS Benchmark - TESTS
  **********************************/
 
-#include "perftest.h"
+#include <inmate.h>
+#include "ee.h"
+#include "test.h"
 #include "hal.h"
 
-/* I put this one here just to be sure that debugger is gonna see symbol */
-volatile uint8_t end_flag;
+static volatile OSEE_TICK_TYPE measure;
+
+static inline void perf_start_measure( void )
+{
+  	measure = DemoHAL_TimerGetValue();
+  	OSEE_BARRIER();
+}
+
+static inline OSEE_TICK_TYPE perf_read_measure( void )
+{
+  	const OSEE_TICK_TYPE endtime = DemoHAL_TimerGetValue();
+
+  	DemoHAL_DataBarrier();
+  	/* I should not handle wrap around 31 bits counter are enough */
+  	return (endtime - measure);
+}
+
+
+/* Common code to update the values of the measures. */
+static void perf_store_sample(struct perftest *data,
+  		OSEE_TICK_TYPE sample, uint32_t n)
+{
+  	data->mean = (((n - 1U) * data->mean) + sample) / n;
+
+  	if(sample > data->max) {
+    		data->max = sample;
+  	}
+
+  	if((sample < data->min) || (data->min == 0U)) {
+    		data->min = sample;
+  	}
+}
+
+/* Supported tests. */
+#include "tests/act.h"
+#include "tests/actl.h"
+#include "tests/intdisable.h"
+#include "tests/intenable.h"
+#include "tests/isr2entry.h"
+#include "tests/isrentry.h"
+#include "tests/isrexit.h"
+#include "tests/istentry.h"
+#include "tests/istexit.h"
+#include "tests/terml.h"
+
+#define PERF_ENABLE(name)  { 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0},
+static struct perftest alltests[] = {
+#include "tests_list.h"
+	{ 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0}
+};
+#undef PERF_ENABLE
+
+#define PERF_ENABLE(name) {               \
+  	alltests[i].setup = name ## _setup;     \
+  	alltests[i].main = name ## _main;       \
+  	alltests[i].task1 = name ## _task1;     \
+  	alltests[i].task3 = name ## _task3;     \
+  	alltests[i].task4 = name ## _task4;     \
+  	alltests[i].cleanup = name ## _cleanup; \
+  	alltests[i].mean = 0U;                   \
+  	alltests[i].max  = 0U;                   \
+  	alltests[i].min  = 0U;                   \
+  	alltests[i].test_name  = #name;          \
+  	i++; }
+
+volatile unsigned alltest_size;
+
+static void perf_init(void)
+{
+  	int i = 0;
+
+#include "tests_list.h"
+  	/* just to be sure to end the test suite */
+  	alltests[i].main = 0;
+  	alltest_size = i;
+}
+#undef PERF_ENABLE
+
+/* Common code to run the tests, to be used in code.c */
+static void perf_run_all(void)
+{
+  	struct perftest *test;
+
+  	perf_test = 0;
+  	test = &alltests[0];
+
+  	do {
+    		test->setup(test);
+    		test->main(test);
+    		test->cleanup(test);
+
+    		test = &alltests[++perf_test];
+  	} while (test->main);
+}
+
+void perf_finalize(struct perftest *data)
+{
+	/*
+ 	 * Put here any code that must be executed by all tests
+	 *  once the test is finished.
+	 */
+}
+
+
+static void perf_final_results ( void )
+{
+	/*
+ 	 * Put here any code to be executed once the test suite
+	 * has finished execution (e.g. to normalize data).
+	 */
+  	int i = 0;
+	for (i = 0; i < alltest_size; ++i) {
+		printk("%s:\t\t Min = %lu\t\t Mean = %lu\t\t Max = %lu\n",
+			alltests[i].test_name,
+			alltests[i].min,
+			alltests[i].mean,
+			alltests[i].max);
+	}
+}
+
+
+
+
 
 ISR2(isrentry_isr2)
 {
@@ -116,7 +239,6 @@ TASK(MainTask)
   	perf_init();
   	perf_run_all();
   	perf_final_results();
-  	end_flag = 1;
 }
 
 

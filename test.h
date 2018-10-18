@@ -39,8 +39,8 @@
  * project.
  * ###*E*### */
 
-/** \file	perftest.h
- *  \brief	Code to run tests.
+/** \file	test.h
+ *  \brief	Header for code to run tests.
  *
  *  \author	Errico Guidieri, Claudio Scordino
  *  \date	2018
@@ -49,9 +49,13 @@
 #define __PERFTEST_H__
 
 #include <inmate.h>
-#include "osperf.h"
+#include "ee.h"
 
 #define PERF_LOOPS  5
+
+static inline void perf_start_measure( void );
+
+static inline OSEE_TICK_TYPE perf_read_measure( void );
 
 /*
  * Each test has right to store its own results into a perftest structure.
@@ -82,106 +86,16 @@ static int perf_test;
 
 /* Common code to update the values of the measures. */
 static void perf_store_sample(struct perftest *data,
-  		OSEE_TICK_TYPE sample, uint32_t n)
-{
-  	data->mean = (((n - 1U) * data->mean) + sample) / n;
+  		OSEE_TICK_TYPE sample, uint32_t n);
 
-  	if(sample > data->max) {
-    		data->max = sample;
-  	}
 
-  	if((sample < data->min) || (data->min == 0U)) {
-    		data->min = sample;
-  	}
-}
-
-/* Supported tests. */
-#include "tests/act.h"
-#include "tests/actl.h"
-#include "tests/intdisable.h"
-#include "tests/intenable.h"
-#include "tests/isr2entry.h"
-#include "tests/isrentry.h"
-#include "tests/isrexit.h"
-#include "tests/istentry.h"
-#include "tests/istexit.h"
-#include "tests/terml.h"
-
-#define PERF_ENABLE(name)  { 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0},
-static struct perftest alltests[] = {
-#include "perflist.h"
-	{ 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0}
-};
-#undef PERF_ENABLE
-
-#define PERF_ENABLE(name) {               \
-  	alltests[i].setup = name ## _setup;     \
-  	alltests[i].main = name ## _main;       \
-  	alltests[i].task1 = name ## _task1;     \
-  	alltests[i].task3 = name ## _task3;     \
-  	alltests[i].task4 = name ## _task4;     \
-  	alltests[i].cleanup = name ## _cleanup; \
-  	alltests[i].mean = 0U;                   \
-  	alltests[i].max  = 0U;                   \
-  	alltests[i].min  = 0U;                   \
-  	alltests[i].test_name  = #name;          \
-  	i++; }
-
-volatile unsigned alltest_size;
-
-static void perf_init(void)
-{
-  	int i = 0;
-
-#include "perflist.h"
-  	/* just to be sure to end the test suite */
-  	alltests[i].main = 0;
-  	alltest_size = i;
-}
-#undef PERF_ENABLE
+static void perf_init(void);
 
 /* Common code to run the tests, to be used in code.c */
-static void perf_run_all(void)
-{
-  	struct perftest *test;
-
-  	perf_test = 0;
-  	test = &alltests[0];
-
-  	do {
-    		test->setup(test);
-    		test->main(test);
-    		test->cleanup(test);
-
-    		test = &alltests[++perf_test];
-  	} while (test->main);
-}
+static void perf_run_all(void);
 
 void perf_finalize(struct perftest *data);
-void perf_finalize(struct perftest *data)
-{
-	/*
- 	 * Put here any code that must be executed by all tests
-	 *  once the test is finished.
-	 */
-}
-
-
-static void perf_final_results ( void )
-{
-	/*
- 	 * Put here any code to be executed once the test suite
-	 * has finished execution (e.g. to normalize data).
-	 */
-  	int i = 0;
-	for (i = 0; i < alltest_size; ++i) {
-		printk("%s:\t\t Min = %lu\t\t Mean = %lu\t\t Max = %lu\n",
-			alltests[i].test_name,
-			alltests[i].min,
-			alltests[i].mean,
-			alltests[i].max);
-	}
-}
+static void perf_final_results ( void );
 
 
 /*

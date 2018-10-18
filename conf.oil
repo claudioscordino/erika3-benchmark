@@ -81,10 +81,10 @@ CPU mySystem {
   };
 
   APPDATA full_benchmark {
-    APP_SRC = "code.c";
+    APP_SRC = "main.c";
     APP_SRC = "hal.c";
   };
-  
+
     COUNTER SystemTimer {
     MINCYCLE = 1;
     MAXALLOWEDVALUE = 2147483647;

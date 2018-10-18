@@ -52,7 +52,7 @@
 #define __ISREXIT_H__
 
 #include "../hal.h"
-#include "../perftest.h"
+#include "../test.h"
 
 static void isrexit_setup(struct perftest *data)
 {

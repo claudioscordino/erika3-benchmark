@@ -52,7 +52,7 @@
 #define __ISTENTRY_H__
 
 #include "../hal.h"
-#include "../perftest.h"
+#include "../test.h"
 
 static void istentry_setup(struct perftest *data)
 {

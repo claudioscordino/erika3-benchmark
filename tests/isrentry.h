@@ -52,7 +52,7 @@
 #define __ISRENTRY_H__
 
 #include "../hal.h"
-#include "../perftest.h"
+#include "../test.h"
 
 static void isrentry_setup(struct perftest *data)
 {

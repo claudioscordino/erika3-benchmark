@@ -57,12 +57,11 @@
  </long_descr>
 
  <file_section>
-  <file     name="code.c"/>
+  <file     name="main.c"/>
   <file     name="hal.c"/>
   <file     name="conf.oil"/>
-  <file     name="osperf.h"/>
-  <file     name="perflist.h"/>
-  <file     name="perftest.h"/>
+  <file     name="tests_list.h"/>
+  <file     name="test.h"/>
   <file     name="hal.h"/>
   <file     name="tests/act.h"/>
   <file     name="tests/actl.h"/>

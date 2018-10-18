@@ -49,7 +49,7 @@
 #define __INTDISABLE_H__
 
 #include "../hal.h"
-#include "../perftest.h"
+#include "../test.h"
 
 static void intdisable_setup(struct perftest *data)
 {

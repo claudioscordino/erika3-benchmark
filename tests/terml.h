@@ -52,7 +52,7 @@
 #define __TERML_H__
 
 #include "../hal.h"
-#include "../perftest.h"
+#include "../test.h"
 
 static void terml_setup(struct perftest *data)
 {

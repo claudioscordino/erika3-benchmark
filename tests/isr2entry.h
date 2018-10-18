@@ -52,7 +52,7 @@
 #define __ISR2ENTRY_H__
 
 #include "../hal.h"
-#include "../perftest.h"
+#include "../test.h"
 
 static void isr2entry_setup(struct perftest *data)
 {
