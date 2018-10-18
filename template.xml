@@ -63,6 +63,7 @@
   <file     name="tests_list.h"/>
   <file     name="test.h"/>
   <file     name="hal.h"/>
+  <file     name="hal_platform.h"/>
   <file     name="tests/act.h"/>
   <file     name="tests/actl.h"/>
   <file     name="tests/intdisable.h"/>

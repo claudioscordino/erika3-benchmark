@@ -53,6 +53,7 @@
 
 /* ERIKA Enterprise. */
 #include "ee.h"
+#include "hal_platform.h"
 
 #if (defined(__cplusplus))
 extern "C" {

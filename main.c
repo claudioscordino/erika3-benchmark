@@ -50,10 +50,21 @@
  * Generic OS Benchmark - TESTS
  **********************************/
 
-#include <inmate.h>
 #include "ee.h"
 #include "test.h"
 #include "hal.h"
+
+/* Supported tests: */
+#include "tests/act.h"
+#include "tests/actl.h"
+#include "tests/intdisable.h"
+#include "tests/intenable.h"
+#include "tests/isr2entry.h"
+#include "tests/isrentry.h"
+#include "tests/isrexit.h"
+#include "tests/istentry.h"
+#include "tests/istexit.h"
+#include "tests/terml.h"
 
 static volatile OSEE_TICK_TYPE start_time;
 
@@ -70,7 +81,7 @@ static inline void perf_stop_measure(struct test *data, uint32_t n)
   	DemoHAL_DataBarrier();
 	if (end_time < start_time) {
 		const char* msg = "ERROR: wrap around detected!\n";
-		DemoHAL_SerialWrite(msg, strlen(msg));
+		DemoHAL_SerialWrite((uint8_t*) msg, strlen(msg));
 	} else {
 		OSEE_TICK_TYPE sample = end_time - start_time;
   		data->mean = (((n - 1U) * data->mean) + sample) / n;
@@ -84,18 +95,6 @@ static inline void perf_stop_measure(struct test *data, uint32_t n)
   		}
 	}
 }
-
-/* Supported tests. */
-#include "tests/act.h"
-#include "tests/actl.h"
-#include "tests/intdisable.h"
-#include "tests/intenable.h"
-#include "tests/isr2entry.h"
-#include "tests/isrentry.h"
-#include "tests/isrexit.h"
-#include "tests/istentry.h"
-#include "tests/istexit.h"
-#include "tests/terml.h"
 
 #define PERF_ENABLE(name)  { 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0},
 static struct test alltests[] = {
@@ -164,17 +163,13 @@ static void perf_final_results ( void )
 	 */
   	int i = 0;
 	for (i = 0; i < alltest_size; ++i) {
-		printk("%s:\t\t Min = %lu\t\t Mean = %lu\t\t Max = %lu\n",
+		DemoHAL_SerialWriteF("%s:\t\t Min = %lu\t\t Mean = %lu\t\t Max = %lu\n",
 			alltests[i].test_name,
 			alltests[i].min,
 			alltests[i].mean,
 			alltests[i].max);
 	}
 }
-
-
-
-
 
 ISR2(isrentry_isr2)
 {
