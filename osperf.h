@@ -53,7 +53,7 @@
 
 static volatile OSEE_TICK_TYPE measure;
 
-DeclareIsr(isr2entry_isr2);
+DeclareIsr(isrentry_isr2);
 DeclareIsr(istentry_isr2);
 DeclareIsr(istexit_isr2);
 
