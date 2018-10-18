@@ -66,7 +66,7 @@ static void istexit_main(struct perftest *data)
 
   	for (i = 0; i < PERF_LOOPS; i++) {
 		DemoHAL_ISRTrigger(DEMO_HAL_ISR_4);
-    		delta = DemoHAL_TimerGetValue();
+		delta = perf_read_measure();
     		perf_store_sample(data, delta, ++i);
   	}
 }

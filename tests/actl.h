@@ -83,7 +83,7 @@ static void actl_task4(struct perftest *data)
 
 	ActivateTask(Task3);
 
-	delta = DemoHAL_TimerGetValue();
+	delta = perf_read_measure();
 	perf_store_sample(data, delta, ++i);
 }
 

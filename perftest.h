@@ -171,6 +171,14 @@ void perf_finalize(struct perftest *data)
 
 static void perf_final_results ( void )
 {
+  	int i = 0;
+	for (i = 0; i < alltest_size; ++i) {
+		printk("%s:\t\t Min = %llu\t\t Mean = %llu\t\t Max = %llu\n",
+			alltests[i].test_name,
+			alltests[i].min,
+			alltests[i].mean,
+			alltests[i].max);
+	}
 	/*
  	 * Put here any code to be executed once the test suite
 	 * has finished execution (e.g. to normalize data).

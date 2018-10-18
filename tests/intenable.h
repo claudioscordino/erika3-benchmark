@@ -66,7 +66,7 @@ static void intenable_main(struct perftest *data)
 
 		EnableAllInterrupts();
 
-		delta = DemoHAL_TimerGetValue();
+		delta = perf_read_measure();
 		perf_store_sample(data, delta, i);
 
 		DisableAllInterrupts();

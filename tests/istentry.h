@@ -78,7 +78,7 @@ static void istentry_task3(struct perftest *data)
   	static int i;
   	OSEE_TICK_TYPE delta;
 
-  	delta = DemoHAL_TimerGetValue();
+	delta = perf_read_measure();
   	perf_store_sample(data, delta, ++i);
 }
 
