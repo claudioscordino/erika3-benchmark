@@ -54,11 +54,11 @@
 #include "../hal.h"
 #include "../test.h"
 
-static void terml_setup(struct perftest *data)
+static void terml_setup(struct test *data)
 {
 }
 
-static void terml_main(struct perftest *data)
+static void terml_main(struct test *data)
 {
 	int i;
 
@@ -66,24 +66,24 @@ static void terml_main(struct perftest *data)
 		ActivateTask(Task4);
 }
 
-static void terml_task1(struct perftest *data)
+static void terml_task1(struct test *data)
 {
 }
 
-static void terml_task3(struct perftest *data)
+static void terml_task3(struct test *data)
 {
 	static int i = 0;
 
   	perf_stop_measure(curdata, ++i);
 }
 
-static void terml_task4(struct perftest *data)
+static void terml_task4(struct test *data)
 {
 	ActivateTask(Task3);
 	perf_start_measure();
 }
 
-static void terml_cleanup(struct perftest *data)
+static void terml_cleanup(struct test *data)
 {
 	perf_finalize(data);
 }

@@ -48,13 +48,12 @@
 #ifndef __TEST_H__
 #define __TEST_H__
 
-#include <inmate.h>
 #include "ee.h"
 
 #define PERF_LOOPS  100
 
 /*
- * Each test has right to store its own results into a perftest structure.
+ * Each test has right to store its own results into a test structure.
  * All values expressed in ns.
  * Test descriptor:
  * - setup() is called when the execution of the single test begins;
@@ -62,14 +61,14 @@
  *   all the necessary events and to collect stats on them;
  * - cleanup() restores the initial condition.
  */
-struct perftest {
+struct test {
   	const char *test_name;
-  	void (*setup)(struct perftest *data);
-  	void (*main)(struct perftest *data);
-  	void (*task1)(struct perftest *data);
-  	void (*task3)(struct perftest *data);
-  	void (*task4)(struct perftest *data);
-  	void (*cleanup)(struct perftest *data);
+  	void (*setup)(struct test *data);
+  	void (*main)(struct test *data);
+  	void (*task1)(struct test *data);
+  	void (*task3)(struct test *data);
+  	void (*task4)(struct test *data);
+  	void (*cleanup)(struct test *data);
   	OSEE_TICK_TYPE mean;
   	OSEE_TICK_TYPE max;
   	OSEE_TICK_TYPE min;
@@ -77,12 +76,12 @@ struct perftest {
 
 /* Common code to update the values of the measures. */
 static inline void perf_start_measure( void );
-static inline void perf_stop_measure(struct perftest *data, uint32_t n);
+static inline void perf_stop_measure(struct test *data, uint32_t n);
 static void perf_init(void);
-static void perf_finalize(struct perftest *data);
+static void perf_finalize(struct test *data);
 
 
-static struct perftest alltests[];
+static struct test alltests[];
 static int current;
 
 #define curdata (&alltests[current])
@@ -93,7 +92,7 @@ static int current;
  * the task itself.
  */
 #define perf_run_task(id) do {                  \
-  	struct perftest *test = &alltests[current]; \
+  	struct test *test = &alltests[current]; \
   	test->task ## id (test);                      \
 } while (0)
 

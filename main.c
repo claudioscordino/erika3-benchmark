@@ -64,7 +64,7 @@ static inline void perf_start_measure( void )
 }
 
 /* Common code to update the values of the measures. */
-static inline void perf_stop_measure(struct perftest *data, uint32_t n)
+static inline void perf_stop_measure(struct test *data, uint32_t n)
 {
   	const OSEE_TICK_TYPE end_time = DemoHAL_TimerGetValue();
   	DemoHAL_DataBarrier();
@@ -98,7 +98,7 @@ static inline void perf_stop_measure(struct perftest *data, uint32_t n)
 #include "tests/terml.h"
 
 #define PERF_ENABLE(name)  { 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0},
-static struct perftest alltests[] = {
+static struct test alltests[] = {
 #include "tests_list.h"
 	{ 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0}
 };
@@ -133,21 +133,21 @@ static void perf_init(void)
 /* Common code to run the tests, to be used in code.c */
 static void perf_run_all(void)
 {
-  	struct perftest *test;
+  	struct test *tst;
 
   	current = 0;
-  	test = &alltests[0];
+  	tst = &alltests[0];
 
   	do {
-    		test->setup(test);
-    		test->main(test);
-    		test->cleanup(test);
+    		tst->setup(tst);
+    		tst->main(tst);
+    		tst->cleanup(tst);
 
-    		test = &alltests[++current];
-  	} while (test->main);
+    		tst = &alltests[++current];
+  	} while (tst->main);
 }
 
-void perf_finalize(struct perftest *data)
+void perf_finalize(struct test *data)
 {
 	/*
  	 * Put here any code that must be executed by all tests

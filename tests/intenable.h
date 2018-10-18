@@ -51,12 +51,12 @@
 #include "../hal.h"
 #include "../test.h"
 
-static void intenable_setup(struct perftest *data)
+static void intenable_setup(struct test *data)
 {
 	DisableAllInterrupts();
 }
 
-static void intenable_main(struct perftest *data)
+static void intenable_main(struct test *data)
 {
 	int i;
 
@@ -71,19 +71,19 @@ static void intenable_main(struct perftest *data)
 	}
 }
 
-static void intenable_task1(struct perftest *data)
+static void intenable_task1(struct test *data)
 {
 }
 
-static void intenable_task3(struct perftest *data)
+static void intenable_task3(struct test *data)
 {
 }
 
-static void intenable_task4(struct perftest *data)
+static void intenable_task4(struct test *data)
 {
 }
 
-static void intenable_cleanup(struct perftest *data)
+static void intenable_cleanup(struct test *data)
 {
 	EnableAllInterrupts();
 	perf_finalize(data);

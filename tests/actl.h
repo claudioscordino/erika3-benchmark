@@ -54,11 +54,11 @@
 #include "../hal.h"
 #include "../test.h"
 
-static void actl_setup(struct perftest *data)
+static void actl_setup(struct test *data)
 {
 }
 
-static void actl_main(struct perftest *data)
+static void actl_main(struct test *data)
 {
 	int i;
 
@@ -66,15 +66,15 @@ static void actl_main(struct perftest *data)
 		ActivateTask(Task4);
 }
 
-static void actl_task1(struct perftest *data)
+static void actl_task1(struct test *data)
 {
 }
 
-static void actl_task3(struct perftest *data)
+static void actl_task3(struct test *data)
 {
 }
 
-static void actl_task4(struct perftest *data)
+static void actl_task4(struct test *data)
 {
 	static int i = 0;
 
@@ -85,7 +85,7 @@ static void actl_task4(struct perftest *data)
   	perf_stop_measure(curdata, ++i);
 }
 
-static void actl_cleanup(struct perftest *data)
+static void actl_cleanup(struct test *data)
 {
 	perf_finalize(data);
 }
