@@ -149,8 +149,6 @@ static void perf_run_all(void)
   	test = &alltests[0];
 
   	do {
-		printk("Running new test...\n");
-
     		test->setup(test);
     		test->main(test);
     		test->cleanup(test);
@@ -171,18 +169,18 @@ void perf_finalize(struct perftest *data)
 
 static void perf_final_results ( void )
 {
+	/*
+ 	 * Put here any code to be executed once the test suite
+	 * has finished execution (e.g. to normalize data).
+	 */
   	int i = 0;
 	for (i = 0; i < alltest_size; ++i) {
-		printk("%s:\t\t Min = %llu\t\t Mean = %llu\t\t Max = %llu\n",
+		printk("%s:\t\t Min = %lu\t\t Mean = %lu\t\t Max = %lu\n",
 			alltests[i].test_name,
 			alltests[i].min,
 			alltests[i].mean,
 			alltests[i].max);
 	}
-	/*
- 	 * Put here any code to be executed once the test suite
-	 * has finished execution (e.g. to normalize data).
-	 */
 }
 
 
