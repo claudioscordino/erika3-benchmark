@@ -45,8 +45,8 @@
  *  \author	Errico Guidieri, Claudio Scordino
  *  \date	2018
  */
-#ifndef __PERFTEST_H__
-#define __PERFTEST_H__
+#ifndef __TEST_H__
+#define __TEST_H__
 
 #include <inmate.h>
 #include "ee.h"
@@ -83,9 +83,9 @@ static void perf_finalize(struct perftest *data);
 
 
 static struct perftest alltests[];
-static int perf_test;
+static int current;
 
-#define curdata (&alltests[perf_test])
+#define curdata (&alltests[current])
 
 /*
  * NOTE: The two dereferences add a constant offset to the measure: may
@@ -93,8 +93,8 @@ static int perf_test;
  * the task itself.
  */
 #define perf_run_task(id) do {                  \
-  	struct perftest *test = &alltests[perf_test]; \
+  	struct perftest *test = &alltests[current]; \
   	test->task ## id (test);                      \
 } while (0)
 
-#endif /* __PERFTEST_H__ */
+#endif /* __TEST_H__ */

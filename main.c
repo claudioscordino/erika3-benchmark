@@ -135,7 +135,7 @@ static void perf_run_all(void)
 {
   	struct perftest *test;
 
-  	perf_test = 0;
+  	current = 0;
   	test = &alltests[0];
 
   	do {
@@ -143,7 +143,7 @@ static void perf_run_all(void)
     		test->main(test);
     		test->cleanup(test);
 
-    		test = &alltests[++perf_test];
+    		test = &alltests[++current];
   	} while (test->main);
 }
 
