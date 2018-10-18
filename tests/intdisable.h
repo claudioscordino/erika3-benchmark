@@ -57,7 +57,6 @@ static void intdisable_setup(struct perftest *data)
 
 static void intdisable_main(struct perftest *data)
 {
-	OSEE_TICK_TYPE delta;
 	int i;
 
  	for (i = 1; i <= PERF_LOOPS; i++) {
@@ -65,8 +64,7 @@ static void intdisable_main(struct perftest *data)
 
 		DisableAllInterrupts();
 
-		delta = perf_read_measure();
-		perf_store_sample(data, delta, i);
+  		perf_stop_measure(curdata, i);
 
 		EnableAllInterrupts();
 	}

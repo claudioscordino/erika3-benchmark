@@ -76,15 +76,13 @@ static void actl_task3(struct perftest *data)
 
 static void actl_task4(struct perftest *data)
 {
-	OSEE_TICK_TYPE delta;
-	static int i;
+	static int i = 0;
 
 	perf_start_measure();
 
 	ActivateTask(Task3);
 
-	delta = perf_read_measure();
-	perf_store_sample(data, delta, ++i);
+  	perf_stop_measure(curdata, ++i);
 }
 
 static void actl_cleanup(struct perftest *data)

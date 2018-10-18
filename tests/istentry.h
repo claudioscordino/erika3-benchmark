@@ -75,11 +75,9 @@ static void istentry_task1(struct perftest *data)
 
 static void istentry_task3(struct perftest *data)
 {
-  	static int i;
-  	OSEE_TICK_TYPE delta;
+  	static int i = 0;
 
-	delta = perf_read_measure();
-  	perf_store_sample(data, delta, ++i);
+  	perf_stop_measure(curdata, ++i);
 }
 
 static void istentry_task4(struct perftest *data)

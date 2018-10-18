@@ -51,11 +51,7 @@
 #include <inmate.h>
 #include "ee.h"
 
-#define PERF_LOOPS  5
-
-static inline void perf_start_measure( void );
-
-static inline OSEE_TICK_TYPE perf_read_measure( void );
+#define PERF_LOOPS  100
 
 /*
  * Each test has right to store its own results into a perftest structure.
@@ -79,24 +75,17 @@ struct perftest {
   	OSEE_TICK_TYPE min;
 };
 
+/* Common code to update the values of the measures. */
+static inline void perf_start_measure( void );
+static inline void perf_stop_measure(struct perftest *data, uint32_t n);
+static void perf_init(void);
+static void perf_finalize(struct perftest *data);
+
+
 static struct perftest alltests[];
 static int perf_test;
 
 #define curdata (&alltests[perf_test])
-
-/* Common code to update the values of the measures. */
-static void perf_store_sample(struct perftest *data,
-  		OSEE_TICK_TYPE sample, uint32_t n);
-
-
-static void perf_init(void);
-
-/* Common code to run the tests, to be used in code.c */
-static void perf_run_all(void);
-
-void perf_finalize(struct perftest *data);
-static void perf_final_results ( void );
-
 
 /*
  * NOTE: The two dereferences add a constant offset to the measure: may

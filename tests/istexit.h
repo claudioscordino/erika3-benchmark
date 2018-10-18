@@ -61,13 +61,11 @@ static void istexit_setup(struct perftest *data)
 
 static void istexit_main(struct perftest *data)
 {
-  	OSEE_TICK_TYPE delta;
   	int i;
 
   	for (i = 0; i < PERF_LOOPS; i++) {
 		DemoHAL_ISRTrigger(DEMO_HAL_ISR_4);
-		delta = perf_read_measure();
-    		perf_store_sample(data, delta, ++i);
+  		perf_stop_measure(curdata, ++i);
   	}
 }
 

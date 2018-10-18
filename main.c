@@ -55,37 +55,34 @@
 #include "test.h"
 #include "hal.h"
 
-static volatile OSEE_TICK_TYPE measure;
+static volatile OSEE_TICK_TYPE start_time;
 
 static inline void perf_start_measure( void )
 {
-  	measure = DemoHAL_TimerGetValue();
+  	start_time = DemoHAL_TimerGetValue();
   	OSEE_BARRIER();
 }
 
-static inline OSEE_TICK_TYPE perf_read_measure( void )
-{
-  	const OSEE_TICK_TYPE endtime = DemoHAL_TimerGetValue();
-
-  	DemoHAL_DataBarrier();
-  	/* I should not handle wrap around 31 bits counter are enough */
-  	return (endtime - measure);
-}
-
-
 /* Common code to update the values of the measures. */
-static void perf_store_sample(struct perftest *data,
-  		OSEE_TICK_TYPE sample, uint32_t n)
+static inline void perf_stop_measure(struct perftest *data, uint32_t n)
 {
-  	data->mean = (((n - 1U) * data->mean) + sample) / n;
+  	const OSEE_TICK_TYPE end_time = DemoHAL_TimerGetValue();
+  	DemoHAL_DataBarrier();
+	if (end_time < start_time) {
+		const char* msg = "ERROR: wrap around detected!\n";
+		DemoHAL_SerialWrite(msg, strlen(msg));
+	} else {
+		OSEE_TICK_TYPE sample = end_time - start_time;
+  		data->mean = (((n - 1U) * data->mean) + sample) / n;
 
-  	if(sample > data->max) {
-    		data->max = sample;
-  	}
+  		if(sample > data->max) {
+    			data->max = sample;
+  		}
 
-  	if((sample < data->min) || (data->min == 0U)) {
-    		data->min = sample;
-  	}
+  		if((sample < data->min) || (data->min == 0U)) {
+    			data->min = sample;
+  		}
+	}
 }
 
 /* Supported tests. */
@@ -181,11 +178,9 @@ static void perf_final_results ( void )
 
 ISR2(isrentry_isr2)
 {
-  	static int i;
-  	OSEE_TICK_TYPE delta;
+  	static int i = 0;
 
-  	delta = perf_read_measure();
-  	perf_store_sample(curdata, delta, ++i);
+  	perf_stop_measure(curdata, ++i);
 }
 
 ISR2(istentry_isr2)
@@ -201,11 +196,9 @@ ISR2(istexit_isr2)
 
 ISR1(isrentry_isr1)
 {
-  	static int i;
-  	OSEE_TICK_TYPE delta;
+  	static int i = 0;
 
-  	delta = perf_read_measure();
-  	perf_store_sample(curdata, delta, ++i);
+  	perf_stop_measure(curdata, ++i);
 }
 
 ISR1(isrexit_isr1)

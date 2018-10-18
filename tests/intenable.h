@@ -58,7 +58,6 @@ static void intenable_setup(struct perftest *data)
 
 static void intenable_main(struct perftest *data)
 {
-	OSEE_TICK_TYPE delta;
 	int i;
 
  	for (i = 1; i <= PERF_LOOPS; i++) {
@@ -66,8 +65,7 @@ static void intenable_main(struct perftest *data)
 
 		EnableAllInterrupts();
 
-		delta = perf_read_measure();
-		perf_store_sample(data, delta, i);
+  		perf_stop_measure(curdata, i);
 
 		DisableAllInterrupts();
 	}
