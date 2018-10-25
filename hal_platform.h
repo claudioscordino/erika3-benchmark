@@ -39,7 +39,7 @@
  * project.
  * ###*E*### */
 
-/** \file	hal.h
+/** \file	hal_platform.h
  *  \brief	Hw-specific Hardware Abstraction Layer header.
  *
  *  This file contains the header of the hw-specific HAL for Erika Enterprise.
@@ -53,16 +53,14 @@
 
 #include <inmate.h>
 
-/* ERIKA Enterprise. */
 #include "ee.h"
 
 #if (defined(__cplusplus))
 extern "C" {
 #endif
 
-/* Formatted version of SerialWrite (accepting placeholders, similarly to printf). */
-#undef DemoHAL_SerialWriteF
-#define DemoHAL_SerialWriteF printk
+#undef DEMOHAL_PRINTF
+#define DEMOHAL_PRINTF	OSEE_PRINT
 
 #if (defined(__cplusplus))
 }

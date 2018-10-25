@@ -163,7 +163,7 @@ static void perf_final_results ( void )
 	 */
   	int i = 0;
 	for (i = 0; i < alltest_size; ++i) {
-		DemoHAL_SerialWriteF("%s:\t\t Min = %lu\t\t Mean = %lu\t\t Max = %lu\n",
+		DEMOHAL_PRINTF("%s:\t\t Min = %lu\t\t Mean = %lu\t\t Max = %lu\n",
 			alltests[i].test_name,
 			alltests[i].min,
 			alltests[i].mean,
