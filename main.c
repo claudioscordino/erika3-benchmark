@@ -80,8 +80,7 @@ static inline void perf_stop_measure(struct test *data, uint32_t n)
   	const OSEE_TICK_TYPE end_time = DemoHAL_TimerGetValue();
   	DemoHAL_DataBarrier();
 	if (end_time < start_time) {
-		const char* msg = "ERROR: wrap around detected!\n";
-		DemoHAL_SerialWrite((uint8_t*) msg, strlen(msg));
+		DEMOHAL_PRINTF("ERROR: wrap around detected!\n");
 	} else {
 		OSEE_TICK_TYPE sample = end_time - start_time;
   		data->mean = (((n - 1U) * data->mean) + sample) / n;
