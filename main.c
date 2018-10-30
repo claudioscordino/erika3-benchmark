@@ -232,7 +232,8 @@ TASK(MainTask)
 
 int main( void )
 {
-	// Temporary fix for ISR1 in x86
+	// Temporary fix for ISR1s in x86 until the code generator will
+	// properly handle this.
 	set_interrupt_handler(0x22, isrentry_isr1);
 	set_interrupt_handler(0x23, isrexit_isr1);
 

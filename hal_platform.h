@@ -51,8 +51,6 @@
 #ifndef HAL_PLATFORM_H_
 #define HAL_PLATFORM_H_
 
-#include <inmate.h>
-
 #include "ee.h"
 
 #if (defined(__cplusplus))
