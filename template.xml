@@ -43,9 +43,9 @@
   ###*E*###
   -->
 
-<evidence_example version="1" ID="x86_64_full_benchmark">
+<evidence_example version="1" ID="aarch64_full_benchmark">
 
- <category>x86-64/Jailhouse</category>
+ <category>aarch64/Jailhouse</category>
  <title>Full benchmark demo</title>
 
  <small_descr>

@@ -48,27 +48,46 @@
  *  \date	2018
  */
 
-#include <inmate.h>
 #include "hal.h"
+#include "ee.h"
+#include <mach.h>
+#include <inmate.h>
+
+uint64_t start_ticks = 0;
 
 FUNC(void, APPL_CODE) DemoHAL_IdleHook (void )
 {
         /* endless loop*/
         while(1) {
-                asm volatile("hlt": : : "memory");
+                asm volatile("wfi": : : "memory");
         }
 }
 
 
 FUNC(void, APPL_CODE) DemoHAL_DataBarrier ( void ) {}
 
-#define ISRENTRY_ISR2	0x21
-#define ISRENTRY_ISR1	0x22
-#define ISREXIT_ISR1	0x23
-#define ISTENTRY_ISR2	0x24
-#define ISTEXIT_ISR2	0x25
-
 /* ISR HAL */
+
+#define ISRENTRY_ISR2	0x3
+#define ISRENTRY_ISR1	0x4
+#define ISREXIT_ISR1	0x5
+#define ISTENTRY_ISR2	0x6
+#define ISTEXIT_ISR2	0x7
+
+#define GICD_SGIR	(0x0f00)
+#define IS_SGI(x)	(x < 16)
+
+static void inject_IRQ(uint32_t irq_id) {
+	uint64_t gicd_base = OSEE_GIC_BASE + OSEE_GICD_OFFSET;
+	uint64_t gicd_SGIR_base = gicd_base + GICD_SGIR;
+
+	uint8_t target = 0xff;
+	uint8_t routing_mode = 0x3;
+	if (IS_SGI(irq_id))
+		osEE_mmio_write32(gicd_SGIR_base,
+				irq_id + (target << 16) + (routing_mode << 24));
+}
+
 
 FUNC(void, APPL_CODE) DemoHAL_ISRInit( void ) {}
 
@@ -77,23 +96,23 @@ FUNC(void, APPL_CODE) DemoHAL_ISRTrigger(
 ) {
 	switch (isr) {
 	case DEMO_HAL_ISR_0:
-		call_int(ISRENTRY_ISR2);
+		inject_IRQ(ISRENTRY_ISR2);
 		break;
 
 	case DEMO_HAL_ISR_1:
-		call_int(ISRENTRY_ISR1);
+		inject_IRQ(ISRENTRY_ISR1);
 		break;
 
 	case DEMO_HAL_ISR_2:
-		call_int(ISREXIT_ISR1);
+		inject_IRQ(ISREXIT_ISR1);
 		break;
 
 	case DEMO_HAL_ISR_3:
-		call_int(ISTENTRY_ISR2);
+		inject_IRQ(ISTENTRY_ISR2);
 		break;
 
 	case DEMO_HAL_ISR_4:
-		call_int(ISTEXIT_ISR2);
+		inject_IRQ(ISTEXIT_ISR2);
 		break;
 
 	default:
@@ -107,11 +126,15 @@ FUNC(void, APPL_CODE) DemoHAL_ISRDisable( void )
 }
 
 /* Timer HAL */
-FUNC(void, APPL_CODE) DemoHAL_TimerInit( VAR(MemSize, AUTOMATIC) period ) {}
+FUNC(void, APPL_CODE) DemoHAL_TimerInit( VAR(MemSize, AUTOMATIC) period )
+{
+	start_ticks = osEE_aarch64_gtimer_get_ticks();
+}
 
 /*! \brief      Return timer value (expressed in ns) */
-FUNC(OSEE_TICK_TYPE, APPL_CODE) DemoHAL_TimerGetValue( void ) {
-	return tsc_read();
+FUNC(OSEE_TICK_TYPE, APPL_CODE) DemoHAL_TimerGetValue( void )
+{
+	return osEE_aarch64_gtimer_ticks_to_ns(osEE_aarch64_gtimer_get_ticks() - start_ticks);
 }
 
 /* Serial HAL */

@@ -221,6 +221,7 @@ TASK(Task4)
 
 TASK(MainTask)
 {
+	DEMOHAL_PRINTF("Frequency = %u\n", osEE_aarch64_gtimer_get_freq());
 	DemoHAL_ISRInit();
 	DemoHAL_TimerInit(1U);
   	perf_init();
@@ -231,10 +232,6 @@ TASK(MainTask)
 
 int main( void )
 {
-	// Temporary fix for ISR1s in x86 until the code generator will
-	// properly handle this.
-	set_interrupt_handler(0x22, isrentry_isr1);
-	set_interrupt_handler(0x23, isrexit_isr1);
 
   	StartOS(OSDEFAULTAPPMODE);
   	return 0;

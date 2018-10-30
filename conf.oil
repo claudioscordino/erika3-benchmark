@@ -65,7 +65,7 @@ CPU mySystem {
     /* Configure Conservative FLASH Wait States */
     // CFLAGS = "-DMM_CONFIGURE_FLASH_WS"
 
-    CPU_DATA = X86_64 {
+    CPU_DATA = AARCH64 {
       MULTI_STACK = TRUE;
       COMPILER = GCC;
       IDLEHOOK = TRUE {
@@ -73,7 +73,7 @@ CPU mySystem {
       };
     };
 
-    BOARD_DATA = VBOX_3610;
+    SOC_DATA = NVIDIA_TEGRA_X1;
 
     KERNEL_TYPE = OSEK {
       CLASS = ECC1;
@@ -92,7 +92,7 @@ CPU mySystem {
     TYPE = HARDWARE {
       SYSTEM_TIMER = TRUE;
       PRIORITY     = 1;
-      DEVICE       = "APIC_TIMER";
+      DEVICE       = "GTIMER";
     };
     SECONDSPERTICK = 0.001;
   };
@@ -145,31 +145,31 @@ CPU mySystem {
     ISR isrentry_isr2 {
       CATEGORY = 2;
       PRIORITY = 1;
-      SOURCE = "0x21";
+      SOURCE = "0x3";
     };
 
 
     ISR isrentry_isr1 {
       CATEGORY = 1;
       PRIORITY = 4;
-      SOURCE = "0x22";
+      SOURCE = "0x4";
     };
 
     ISR isrexit_isr1 {
       CATEGORY = 1;
       PRIORITY = 5;
-      SOURCE = "0x23";
+      SOURCE = "0x5";
     };
 
     ISR istentry_isr2 {
       CATEGORY = 2;
       PRIORITY = 2;
-      SOURCE = "0x24";
+      SOURCE = "0x6";
     };
 
     ISR istexit_isr2 {
       CATEGORY = 2;
       PRIORITY = 3;
-      SOURCE = "0x25";
+      SOURCE = "0x7";
     };
 };
