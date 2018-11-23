@@ -63,9 +63,9 @@ static void istexit_main(struct test *data)
 {
   	int i;
 
-  	for (i = 0; i < PERF_LOOPS; i++) {
+  	for (i = 1; i <= PERF_LOOPS; i++) {
 		DemoHAL_ISRTrigger(DEMO_HAL_ISR_4);
-  		perf_stop_measure(curdata, ++i);
+  		perf_stop_measure(curdata, i);
   	}
 }
 
