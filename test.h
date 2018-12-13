@@ -69,7 +69,7 @@ struct test {
   	void (*task3)(struct test *data);
   	void (*task4)(struct test *data);
   	void (*cleanup)(struct test *data);
-  	OSEE_TICK_TYPE mean;
+	OSEE_TICK_TYPE sum;
   	OSEE_TICK_TYPE max;
   	OSEE_TICK_TYPE min;
 };

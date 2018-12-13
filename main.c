@@ -83,7 +83,7 @@ static inline void perf_stop_measure(struct test *data, uint32_t n)
 		DEMOHAL_PRINTF("ERROR: wrap around detected!\n");
 	} else {
 		OSEE_TICK_TYPE sample = end_time - start_time;
-  		data->mean = (((n - 1U) * data->mean) + sample) / n;
+		data->sum += sample;
 
   		if(sample > data->max) {
     			data->max = sample;
@@ -109,7 +109,7 @@ static struct test alltests[] = {
   	alltests[i].task3 = name ## _task3;     \
   	alltests[i].task4 = name ## _task4;     \
   	alltests[i].cleanup = name ## _cleanup; \
-  	alltests[i].mean = 0U;                   \
+	alltests[i].sum = 0U;                   \
   	alltests[i].max  = 0U;                   \
   	alltests[i].min  = 0U;                   \
   	alltests[i].test_name  = #name;          \
@@ -162,10 +162,10 @@ static void perf_final_results ( void )
 	 */
   	int i = 0;
 	for (i = 0; i < alltest_size; ++i) {
-		DEMOHAL_PRINTF("%s:\t\t Min = %lu\t\t Mean = %lu\t\t Max = %lu\n",
+		DEMOHAL_PRINTF("%s:\t\t Min = %lu\t\t Avg = %lu\t\t Max = %lu\n",
 			alltests[i].test_name,
 			alltests[i].min,
-			alltests[i].mean,
+			alltests[i].sum/PERF_LOOPS,
 			alltests[i].max);
 	}
 }
